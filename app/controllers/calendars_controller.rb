@@ -19,27 +19,24 @@ class CalendarsController < ApplicationController
   end
 
   def get_week
-    require "date"
-    wdays = ['(日)','(月)','(火)','(水)','(木)','(金)','(土)']   #曜日の配列
+    wdays = ['(日)','(月)','(火)','(水)','(木)','(金)','(土)']
 
     # Dateオブジェクトは、日付を保持しています。下記のように`.today.day`とすると、今日の日付を取得できます。
     @todays_date = Date.today
-    # 例)今日が2月1日の場合・・・ Date.today.day => 1日
-    #Date.today.wdayで今日の曜日を表す。
-   #合わせるなら@todays_date.wdayで今日の曜日を取得できる
+    # 例)　今日が2月1日の場合・・・ Date.today.day => 1日
+
     @week_days = []
 
     plans = Plan.where(date: @todays_date..@todays_date + 6)
 
-    7.times do |x|  #ここで一週間を設定する 
-      today_plans = []  
+    7.times do |x|
+      today_plans = []
       plans.each do |plan|
         today_plans.push(plan.plan) if plan.date == @todays_date + x
-        end
-
-      days = { month: (@todays_date + x).month, date: (@todays_date+x).day, plans: today_plans, 
-        wday: wdays[(@todays_date + x).wday]}
-      @week_days.push(days)#ここで一覧表示する
+      end
+      days = { month: (@todays_date + x).month, date: (@todays_date+x).day, plans: today_plans}
+      @week_days.push(days)
     end
+
   end
- end 
+end
